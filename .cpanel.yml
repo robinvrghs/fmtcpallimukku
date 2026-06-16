@@ -1,4 +1,8 @@
+---
 deployment:
   tasks:
     - export DEPLOYPATH=/home/fmtcpallimukku/fmtcapp
     - /bin/cp -R * $DEPLOYPATH
+    - cd $DEPLOYPATH
+    - npm install
+    - npm run build
