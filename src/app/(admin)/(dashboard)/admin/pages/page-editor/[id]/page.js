@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-import { useSearchParams } from "next/navigation";
-
 import { Formik } from "formik";
 
 import {
@@ -14,17 +12,15 @@ import {
     Typography
 } from "@mui/material";
 
-import SortableBlocks from "../components/SortableBlocks"
+import SortableBlocks from "../../components/SortableBlocks";
+import { createBlock } from "../../utils/blockTemplates";
 
-import { createBlock } from "../utils/blockTemplates";
 
-
-export default function PageEditor() {
+export default function PageEditor({ params }) {
 
     const [loading, setLoading] = useState(true);
 
-    const searchParams = useSearchParams();
-    const pageId = searchParams.get("id");
+    const { id } = params;
 
     const [blocks, setBlocks] = useState([]);
 
@@ -36,13 +32,13 @@ export default function PageEditor() {
         async values => {
 
             const payload = {
-                id: pageId,
+                id: id,
                 ...values,
                 blocks
             };
 
             const url =
-                pageId
+                id
                     ? "https://fmtcpallimukku.ac.in/api/pages/update.php"
                     : "https://fmtcpallimukku.ac.in/api/pages/save.php";
 
@@ -60,7 +56,7 @@ export default function PageEditor() {
 
             if (data.success) {
 
-                alert(pageId ? "Updated" : "Saved");
+                alert(id ? "Updated" : "Saved");
             }
         };
 
@@ -68,7 +64,7 @@ export default function PageEditor() {
 
     useEffect(() => {
 
-        if (!pageId) {
+        if (!id) {
 
             setLoading(false);
 
@@ -77,12 +73,12 @@ export default function PageEditor() {
 
         loadPage();
 
-    }, [pageId]);
+    }, [id]);
 
     const loadPage =
         async () => {
 
-            const response = await fetch(`https://fmtcpallimukku.ac.in/api/pages/get.php?id=${pageId}`);
+            const response = await fetch(`https://fmtcpallimukku.ac.in/api/pages/get.php?id=${id}`);
 
             const data = await response.json();
 

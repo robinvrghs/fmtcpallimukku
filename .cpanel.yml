@@ -1,7 +1,5 @@
 ---
 deployment:
   tasks:
-    - export PATH=/opt/alt/alt-nodejs18/root/usr/bin:$PATH
-    - cd /home/fmtcpallimukku/fmtcapp
-    - node /opt/alt/alt-nodejs18/root/usr/lib/node_modules/npm/bin/npm-cli.js install --production
-    - mkdir -p tmp && touch tmp/restart.txt
+    - export DEPLOYPATH=/home/fmtcpallimukku/fmtcapp
+    - /bin/cp -R . $DEPLOYPATH
