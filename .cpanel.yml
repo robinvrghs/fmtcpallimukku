@@ -1,8 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/fmtcpallimukku/fmtcapp
-    - /bin/cp -R * $DEPLOYPATH
-    - cd $DEPLOYPATH
-    - npm install
-    - npm run build
+    - export PATH=/home/fmtcpallimukku/fmtcapp
+    - cd /home/fmtcpallimukku/fmtcapp
+    - npm install --production
+    - mkdir -p tmp && touch tmp/restart.txt
