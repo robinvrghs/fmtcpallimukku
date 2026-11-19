@@ -104,4 +104,3 @@ const theme = createTheme({
 });
 
 export default theme;
-6n

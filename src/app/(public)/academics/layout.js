@@ -1,6 +1,5 @@
 "use client"
 
-import Appbar from "@/app/components/appbar";
 
 import {
     Box, Container, Grid, Toolbar
@@ -14,8 +13,6 @@ export default function Academics({ children }) {
     return (
         <Box>
 
-            <Appbar />
-            <Toolbar />
 
             <SubHeader title="Academics" />
 

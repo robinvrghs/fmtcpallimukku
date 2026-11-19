@@ -1,12 +1,10 @@
 "use client"
 
-import Appbar from "@/app/components/appbar";
 
 import {
-    Box, Container, Grid, Tab, Tabs, Toolbar, Typography
+    Box, Container, Grid, Toolbar
 } from "@mui/material";
 
-import SubMenu from "@/app/components/subMenu";
 import SubHeader from "@/app/components/subHeader";
 import ContactUs from "./contactus";
 
@@ -14,9 +12,6 @@ export default function Contact({ children }) {
 
     return (
         <Box>
-
-            <Appbar />
-            <Toolbar />
 
             <SubHeader title="Contact" />
 

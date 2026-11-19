@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 
-import Appbar from "@/app/components/appbar";
 import GalleryModal from "./gallerymodal";
 
 
@@ -122,8 +121,7 @@ export default function Home() {
 
         <Box sx={{ background: '#fff' }}>
 
-            <Appbar />
-            <Toolbar />
+
 
             <Box
                 sx={{

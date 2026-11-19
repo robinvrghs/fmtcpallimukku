@@ -1,5 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/fmtcpallimukku/fmtcapp
-    - /bin/cp -R . $DEPLOYPATH
