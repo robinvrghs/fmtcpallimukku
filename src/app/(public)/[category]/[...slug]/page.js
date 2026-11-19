@@ -1,7 +1,7 @@
 
 import { Box, Container, Grid } from "@mui/material";
 import RenderBlock from "./components/RenderBlock";
-import SubMenu from "@/app/components/subMenu";
+import SubMenu from "@/app/components/public/SubMenu";
 import { notFound } from "next/navigation";
 
 export const dynamic = "force-dynamic";

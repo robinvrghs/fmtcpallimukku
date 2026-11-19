@@ -276,10 +276,12 @@ export default function Footer() {
                 {/* Bottom footer */}
                 <Stack
                     direction={{ xs: "column", md: "row" }}
-                    justifyContent="space-between"
-                    alignItems={{ xs: "flex-start", md: "center" }}
+                    sx={{
+                        justifyContent: "space-between",
+                        alignItems: { xs: "flex-start", md: "center" },
+                        pb: 3
+                    }}
                     spacing={2}
-                    sx={{ pb: 3 }}
                 >
                     <Typography
                         sx={{

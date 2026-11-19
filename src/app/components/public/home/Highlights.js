@@ -62,9 +62,9 @@ export default function Highlights() {
                             >
                                 <Stack
                                     direction="row"
-                                    alignItems="center"
                                     spacing={2}
                                     sx={{
+                                        alignItems: "center",
                                         px: {
                                             xs: 1,
                                             sm: 2.5,

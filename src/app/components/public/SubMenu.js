@@ -16,7 +16,7 @@ export default function SubMenu({
     const pathname = usePathname();
 
     const currentTab = pages.findIndex((page) => {
-        const href = `/${categorySlug}/${page.slug}/`;
+        const href = `/${categorySlug}/${page.slug}`;
         return pathname === href;
     });
 

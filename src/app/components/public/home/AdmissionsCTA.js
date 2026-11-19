@@ -61,17 +61,18 @@ export default function AdmissionsCTA() {
 
                     <Stack
                         direction={{ xs: "column", md: "row" }}
-                        justifyContent="space-between"
-                        alignItems={{ xs: "flex-start", md: "center" }}
+                        sx={{
+                            justifyContent: "space-between",
+                            alignItems: { xs: "flex-start", md: "center" },
+                            position: "relative"
+                        }}
                         spacing={4}
-                        sx={{ position: "relative" }}
                     >
                         <Box sx={{ maxWidth: 650 }}>
                             <Stack
                                 direction="row"
-                                alignItems="center"
                                 spacing={1}
-                                sx={{ mb: 2 }}
+                                sx={{ mb: 2, alignItems: "center" }}
                             >
                                 <SchoolOutlined sx={{ color: "#E5BD55" }} />
 

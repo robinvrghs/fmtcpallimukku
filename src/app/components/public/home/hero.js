@@ -83,8 +83,7 @@ export default function Hero() {
                     <Stack
                         direction="row"
                         spacing={1}
-                        alignItems="center"
-                        sx={{ mb: 2.5 }}
+                        sx={{ mb: 2.5, alignItems: "center" }}
                     >
                         <Box
                             sx={{
@@ -158,7 +157,7 @@ export default function Hero() {
                     <Stack
                         direction={{ xs: "column", sm: "row" }}
                         spacing={2}
-                        alignItems={{ xs: "stretch", sm: "center" }}
+                        sx={{ alignItems: { xs: "stretch", sm: "center" } }}
                     >
                         <Button
                             component={Link}

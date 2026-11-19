@@ -13,9 +13,9 @@ import {
     Box
 } from "@mui/material";
 
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-
 import { useAuth } from "@/context/AuthContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCloudArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 const API_URL = "https://fmtcpallimukku.ac.in/api";
 const SITE_URL = "https://fmtcpallimukku.ac.in";
@@ -149,7 +149,7 @@ export default function UploadEditor({
                 <Button
                     variant="outlined"
                     component="label"
-                    startIcon={<CloudUploadIcon />}
+                    startIcon={<FontAwesomeIcon icon={faCloudArrowUp} />}
                     disabled={loading}
                 >
                     {loading
@@ -175,7 +175,7 @@ export default function UploadEditor({
                 <Stack
                     direction="row"
                     spacing={2}
-                    alignItems="center"
+                    sx={{ alignItems: 'center' }}
                 >
                     <CircularProgress size={22} />
                     <Typography variant="body2">
@@ -232,8 +232,7 @@ export default function UploadEditor({
                         href={previewUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        display="block"
-                        sx={{ mt: 1 }}
+                        sx={{ display: block, mt: 1 }}
                     >
                         View uploaded PDF
                     </Typography>

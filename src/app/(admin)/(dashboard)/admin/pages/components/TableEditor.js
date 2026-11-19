@@ -99,7 +99,7 @@ export default function TableEditor({ block, updateBlock }) {
                             key={index}
                             direction="row"
                             spacing={0.5}
-                            alignItems="center"
+                            sx={{ alignItems: "center" }}
                         >
                             <TextField
                                 size="small"
@@ -148,8 +148,7 @@ export default function TableEditor({ block, updateBlock }) {
                             key={rowIndex}
                             direction="row"
                             spacing={1}
-                            alignItems="center"
-                            sx={{ minWidth: "max-content" }}
+                            sx={{ minWidth: "max-content", alignItems: "center" }}
                         >
                             {headers.map((_, colIndex) => (
                                 <TextField

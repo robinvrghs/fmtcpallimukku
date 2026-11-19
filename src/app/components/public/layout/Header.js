@@ -77,25 +77,27 @@ function TopBar() {
             <Container maxWidth="xl">
                 <Stack
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
+                    sx={{
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                    }}
                 >
-                    <Stack direction="row" spacing={3} alignItems="center">
-                        <Stack direction="row" spacing={0.7} alignItems="center">
+                    <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
+                        <Stack direction="row" spacing={0.7} sx={{ alignItems: "center" }}>
                             <LocationOnOutlined fontSize="small" />
                             <Typography variant="caption">
                                 Pallimukku, Kollam, Kerala
                             </Typography>
                         </Stack>
 
-                        <Stack direction="row" spacing={0.7} alignItems="center">
+                        <Stack direction="row" spacing={0.7} sx={{ alignItems: "center" }}>
                             <PhoneOutlined fontSize="small" />
                             <Typography variant="caption">
                                 0474-2727368
                             </Typography>
                         </Stack>
 
-                        <Stack direction="row" spacing={0.7} alignItems="center">
+                        <Stack direction="row" spacing={0.7} sx={{ alignItems: "center" }}>
                             <EmailOutlined fontSize="small" />
                             <Typography variant="caption">
                                 fathimabed@gmail.com
@@ -104,7 +106,7 @@ function TopBar() {
                     </Stack>
 
                     <Stack direction="row" spacing={2}>
-                        {/* <Stack direction="row" spacing={0.6} alignItems="center">
+                        {/* <Stack direction="row" spacing={0.6} sx={{alignItems:"center"}}>
                             <LockOutlined fontSize="small" />
                             <Typography variant="caption">
                                 Student Login
@@ -138,9 +140,8 @@ function MainHeader({ onMobileMenu }) {
                     {/* College identity */}
                     <Stack
                         direction="row"
-                        alignItems="center"
                         spacing={{ xs: 1, md: 2 }}
-                        sx={{ minWidth: 0 }}
+                        sx={{ minWidth: 0, alignItems: "center" }}
                     >
                         <Box
                             sx={{
@@ -184,8 +185,7 @@ function MainHeader({ onMobileMenu }) {
                     <Stack
                         direction="row"
                         spacing={2}
-                        alignItems="center"
-                        sx={{ display: { xs: "none", md: "flex" } }}
+                        sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
                     >
                         <IconButton aria-label="Search">
                             <Search />
@@ -337,7 +337,7 @@ function Navigation({ categories, pathname }) {
             }}
         >
             <Container maxWidth="lg">
-                <Stack direction="row" alignItems="center">
+                <Stack direction="row" sx={{ alignItems: "center" }}>
 
                     {categories.map((category) => {
                         const active = pathname.startsWith(
@@ -460,7 +460,7 @@ function MobilePageItem({
 
     return (
         <Box>
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" sx={{ alignItems: "center" }}>
                 <ListItemButton
                     component={Link}
                     href={href}
@@ -535,8 +535,10 @@ function MobileNavigation({
             <Box sx={{ p: 2 }}>
                 <Stack
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
+                    sx={{
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                    }}
                 >
                     <Typography
                         fontWeight={700}

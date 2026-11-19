@@ -60,10 +60,12 @@ export default function ProgrammesSection() {
                 {/* Section heading */}
                 <Stack
                     direction={{ xs: "column", md: "row" }}
-                    justifyContent="space-between"
-                    alignItems={{ xs: "flex-start", md: "flex-end" }}
                     spacing={3}
-                    sx={{ mb: 5 }}
+                    sx={{
+                        mb: 5,
+                        justifyContent: "space-between",
+                        alignItems: { xs: "flex-start", md: "flex-end" }
+                    }}
                 >
                     <Box sx={{ maxWidth: 650 }}>
                         <Typography
@@ -174,9 +176,8 @@ export default function ProgrammesSection() {
                                 <CardContent sx={{ p: { xs: 3, md: 3.5 } }}>
                                     <Stack
                                         direction="row"
-                                        alignItems="center"
                                         spacing={1}
-                                        sx={{ mb: 1.5 }}
+                                        sx={{ mb: 1.5, alignItems: "center" }}
                                     >
                                         <SchoolOutlined
                                             sx={{ color: "#B18A28", fontSize: 19 }}

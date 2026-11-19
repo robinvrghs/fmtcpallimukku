@@ -437,8 +437,10 @@ export default function BlockEditor({
                                 <Stack spacing={2}>
                                     <Stack
                                         direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
+                                        sx={{
+                                            justifyContent: "space-between",
+                                            alignItems: "center"
+                                        }}
                                     >
                                         <Typography fontWeight={600}>
                                             Management Member {index + 1}
@@ -529,7 +531,7 @@ export default function BlockEditor({
                                 key={index}
                                 direction="row"
                                 spacing={1}
-                                alignItems="center"
+                                sx={{ alignItems: "center" }}
                             >
                                 <TextField
                                     label={`Objective ${index + 1}`}
@@ -583,8 +585,10 @@ export default function BlockEditor({
                                 <Stack spacing={2}>
                                     <Stack
                                         direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
+                                        sx={{
+                                            justifyContent: "space-between",
+                                            alignItems: "center"
+                                        }}
                                     >
                                         <Typography fontWeight={600}>
                                             Timeline Entry {index + 1}
@@ -682,8 +686,10 @@ export default function BlockEditor({
                                 <Stack spacing={2}>
                                     <Stack
                                         direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
+                                        sx={{
+                                            justifyContent: "space-between",
+                                            alignItems: "center"
+                                        }}
                                     >
                                         <Typography fontWeight={600}>
                                             Person {index + 1}
@@ -759,13 +765,15 @@ export default function BlockEditor({
             <Stack spacing={2}>
                 <Stack
                     direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
+                    sx={{
+                        justifyContent: "space-between",
+                        alignItems: "center"
+                    }}
                 >
                     <Stack
                         direction="row"
                         spacing={1}
-                        alignItems="center"
+                        sx={{ alignItems: "center" }}
                     >
                         <Tooltip title="Drag to reorder">
                             <IconButton

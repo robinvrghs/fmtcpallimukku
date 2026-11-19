@@ -27,7 +27,7 @@ export default function ContactSection() {
     return (
         <Box sx={{ py: { xs: 7, md: 11 }, bgcolor: "#FAF9F6" }}>
             <Container maxWidth="xl">
-                <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
+                <Grid container spacing={{ xs: 5, md: 8, alignItems: "center" }} >
                     <Grid size={{ xs: 12, md: 5 }}>
                         <Typography
                             variant="overline"
@@ -154,7 +154,7 @@ export default function ContactSection() {
 
 function ContactItem({ icon, title, detail }) {
     return (
-        <Stack direction="row" spacing={2} alignItems="flex-start">
+        <Stack direction="row" spacing={2} sx={{ alignItems: "flex-start" }}>
             <Box
                 sx={{
                     width: 46,

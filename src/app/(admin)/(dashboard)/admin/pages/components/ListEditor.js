@@ -41,7 +41,7 @@ export default function ListEditor({ block, updateBlock }) {
                     key={index}
                     direction="row"
                     spacing={1}
-                    alignItems="center"
+                    sx={{ alignItems: "center" }}
                 >
                     <TextField
                         fullWidth

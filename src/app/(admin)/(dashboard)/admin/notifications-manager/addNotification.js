@@ -157,7 +157,7 @@ export default function AddNotification(props) {
                                     </Grid>
 
                                     <Grid size={{ xs: 12 }} >
-                                        <Stack direction='row' spacing={3} justifyContent='center'>
+                                        <Stack direction='row' spacing={3} sx={{ justifyContent: 'center' }}>
                                             <Button
                                                 type="submit"
                                                 variant='contained'

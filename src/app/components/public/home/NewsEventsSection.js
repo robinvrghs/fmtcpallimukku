@@ -87,10 +87,12 @@ export default function NewsEventsSection() {
                 {/* Heading */}
                 <Stack
                     direction={{ xs: "column", md: "row" }}
-                    justifyContent="space-between"
-                    alignItems={{ xs: "flex-start", md: "flex-end" }}
                     spacing={3}
-                    sx={{ mb: 5 }}
+                    sx={{
+                        mb: 5,
+                        justifyContent: "space-between",
+                        alignItems: { xs: "flex-start", md: "flex-end" }
+                    }}
                 >
                     <Box>
                         <Typography
@@ -128,9 +130,8 @@ export default function NewsEventsSection() {
                     <Grid size={{ xs: 12, md: 7 }}>
                         <Stack
                             direction="row"
-                            alignItems="center"
                             spacing={1}
-                            sx={{ mb: 2.5 }}
+                            sx={{ mb: 2.5, alignItems: "center" }}
                         >
                             <CampaignOutlined sx={{ color: "#880D2E" }} />
                             <Typography
@@ -262,9 +263,8 @@ export default function NewsEventsSection() {
                         >
                             <Stack
                                 direction="row"
-                                alignItems="center"
                                 spacing={1}
-                                sx={{ mb: 3 }}
+                                sx={{ mb: 3, alignItems: "center" }}
                             >
                                 <EventOutlined sx={{ color: "#E5BD55" }} />
                                 <Typography
@@ -377,6 +377,6 @@ export default function NewsEventsSection() {
                     </Grid>
                 </Grid>
             </Container>
-        </Box>
+        </Box >
     );
 }

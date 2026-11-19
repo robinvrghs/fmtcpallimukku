@@ -29,7 +29,7 @@ export default function FounderMessage() {
                         boxShadow: "0 10px 40px rgba(11,45,83,0.07)",
                     }}
                 >
-                    <Grid container alignItems="stretch">
+                    <Grid container sx={{ alignItems: "stretch" }}>
                         {/* Founder portrait */}
                         <Grid size={{ xs: 12, md: 5 }}>
                             <Box
@@ -56,8 +56,8 @@ export default function FounderMessage() {
                         {/* Message */}
                         <Grid size={{ xs: 12, md: 7 }}>
                             <Stack
-                                justifyContent="center"
                                 sx={{
+                                    justifyContent: "center",
                                     height: "100%",
                                     p: { xs: 3, sm: 4, md: 6, lg: 7 },
                                 }}

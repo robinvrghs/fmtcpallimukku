@@ -110,6 +110,17 @@ function buildPageOptions(pages, categoryId) {
     return options;
 }
 
+const generateSlug = (value) => {
+    return value
+        .toLowerCase()
+        .trim()
+        .normalize("NFC")
+        .replace(/[^\p{L}\p{N}\s-]/gu, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "");
+};
+
 export default function PageEditor({ id }) {
 
     const router = useRouter();
@@ -133,6 +144,8 @@ export default function PageEditor({ id }) {
     const [allPages, setAllPages] = useState([]);
 
     const [pagesLoading, setPagesLoading] = useState(true);
+
+    const [slugManuallyEdited, setSlugManuallyEdited] = useState(false);
 
     useEffect(() => {
         const loadPages = async () => {
@@ -211,6 +224,7 @@ export default function PageEditor({ id }) {
     // Load existing page
     useEffect(() => {
         if (!isEdit) {
+            setSlugManuallyEdited(false);
             setLoading(false);
             return;
         }
@@ -237,6 +251,8 @@ export default function PageEditor({ id }) {
                 }
 
                 const page = data.page;
+
+                setSlugManuallyEdited(false);
 
                 setInitialValues({
                     title: page.title || "",
@@ -342,9 +358,11 @@ export default function PageEditor({ id }) {
     if (loading || categoriesLoading || pagesLoading) {
         return (
             <Stack
-                alignItems="center"
-                justifyContent="center"
-                sx={{ minHeight: 300 }}
+                sx={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: 300
+                }}
                 spacing={2}
             >
                 <CircularProgress />
@@ -400,8 +418,10 @@ export default function PageEditor({ id }) {
                             {/* Header */}
                             <Stack
                                 direction="row"
-                                justifyContent="space-between"
-                                alignItems="center"
+                                sx={{
+                                    justifyContent: "space-between",
+                                    alignItems: "center"
+                                }}
                             >
                                 <Typography variant="h5" fontWeight={600}>
                                     {isEdit ? "Edit Page" : "Create Page"}
@@ -443,7 +463,15 @@ export default function PageEditor({ id }) {
                                         label="Page Title"
                                         name="title"
                                         value={values.title}
-                                        onChange={handleChange}
+                                        onChange={(event) => {
+                                            const title = event.target.value;
+
+                                            setFieldValue("title", title);
+
+                                            if (!slugManuallyEdited) {
+                                                setFieldValue("slug", generateSlug(title));
+                                            }
+                                        }}
                                         fullWidth
                                         required
                                     />
@@ -452,10 +480,13 @@ export default function PageEditor({ id }) {
                                         label="Page Slug"
                                         name="slug"
                                         value={values.slug}
-                                        onChange={handleChange}
+                                        onChange={(event) => {
+                                            setSlugManuallyEdited(true);
+                                            setFieldValue("slug", generateSlug(event.target.value));
+                                        }}
                                         fullWidth
                                         required
-                                        helperText="Example: about-us"
+                                        helperText="Automatically generated from the page title. You can edit it manually."
                                     />
 
                                     <TextField
@@ -588,7 +619,7 @@ export default function PageEditor({ id }) {
                                     <Stack
                                         direction="row"
                                         spacing={1}
-                                        flexWrap="wrap"
+                                        sx={{ flexWrap: "wrap" }}
                                         useFlexGap
                                     >
                                         {[
@@ -628,8 +659,7 @@ export default function PageEditor({ id }) {
                                     {blocks.length === 0 && (
                                         <Typography
                                             color="text.secondary"
-                                            textAlign="center"
-                                            sx={{ py: 4 }}
+                                            sx={{ py: 4, textAlign: "center" }}
                                         >
                                             No content blocks added yet.
                                         </Typography>
@@ -640,7 +670,9 @@ export default function PageEditor({ id }) {
                             {/* Bottom save button */}
                             <Stack
                                 direction="row"
-                                justifyContent="flex-end"
+                                sx={{
+                                    justifyContent: "flex-end"
+                                }}
                             >
                                 <Button
                                     type="submit"

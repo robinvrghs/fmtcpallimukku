@@ -64,10 +64,12 @@ export default function CampusLifeSection() {
                 {/* Heading */}
                 <Stack
                     direction={{ xs: "column", md: "row" }}
-                    justifyContent="space-between"
-                    alignItems={{ xs: "flex-start", md: "flex-end" }}
+                    sx={{
+                        justifyContent: "space-between",
+                        alignItems: { xs: "flex-start", md: "flex-end" },
+                        mb: 5
+                    }}
                     spacing={3}
-                    sx={{ mb: 5 }}
                 >
                     <Box sx={{ maxWidth: 650 }}>
                         <Typography

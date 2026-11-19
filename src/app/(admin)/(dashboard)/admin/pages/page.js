@@ -436,10 +436,12 @@ export default function PagesManager() {
             {/* Header */}
             <Stack
                 direction={{ xs: "column", sm: "row" }}
-                justifyContent="space-between"
-                alignItems={{ xs: "stretch", sm: "center" }}
+                sx={{
+                    justifyContent: "space-between",
+                    mb: 3,
+                    alignItems: { xs: "stretch", sm: "center" }
+                }}
                 spacing={2}
-                sx={{ mb: 3 }}
             >
                 <Box>
                     <Typography variant="h5" fontWeight={700}>
@@ -575,8 +577,10 @@ export default function PagesManager() {
 
                         <Stack
                             direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
+                            sx={{
+                                justifyContent: "space-between",
+                                alignItems: "center"
+                            }}
                         >
                             <Box>
                                 <Typography variant="h6" fontWeight={600}>
@@ -773,7 +777,7 @@ export default function PagesManager() {
 
                         <Stack
                             direction="row"
-                            justifyContent="flex-end"
+                            sx={{ justifyContent: "flex-end" }}
                             spacing={1}
                         >
                             <Button
@@ -828,10 +832,12 @@ export default function PagesManager() {
 
                 {loading ? (
                     <Stack
-                        alignItems="center"
-                        justifyContent="center"
                         spacing={2}
-                        sx={{ py: 8 }}
+                        sx={{
+                            py: 8,
+                            alignItems: "center",
+                            justifyContent: "center"
+                        }}
                     >
                         <CircularProgress size={30} />
                         <Typography
@@ -843,9 +849,11 @@ export default function PagesManager() {
                     </Stack>
                 ) : filteredPages.length === 0 ? (
                     <Stack
-                        alignItems="center"
                         spacing={2}
-                        sx={{ py: 8, px: 2 }}
+                        sx={{
+                            py: 8, px: 2,
+                            alignItems: "center"
+                        }}
                     >
                         <Typography color="text.secondary">
                             No pages found.
@@ -934,7 +942,7 @@ export default function PagesManager() {
                                                 <Stack
                                                     direction="row"
                                                     spacing={0.5}
-                                                    justifyContent="flex-end"
+                                                    sx={{ justifyContent: "flex-end" }}
                                                 >
                                                     <Tooltip title="Edit page">
                                                         <IconButton

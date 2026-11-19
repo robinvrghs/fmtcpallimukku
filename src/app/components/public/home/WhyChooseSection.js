@@ -170,9 +170,11 @@ export default function WhyChooseSection() {
                                         >
                                             <Stack
                                                 direction="row"
-                                                justifyContent="space-between"
-                                                alignItems="center"
-                                                sx={{ mb: 3 }}
+                                                sx={{
+                                                    justifyContent: "space-between",
+                                                    alignItems: "center",
+                                                    mb: 3
+                                                }}
                                             >
                                                 <Box
                                                     sx={{

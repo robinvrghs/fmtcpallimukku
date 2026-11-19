@@ -158,7 +158,7 @@ export default function Sidebar() {
   // Recursive page renderer
   const renderPages = (pages, depth = 0) => {
     return (pages || []).map((page) => {
-      const href = `/admin/pages/page-editor/${page.id}/`;
+      const href = `/admin/pages/page-editor/${page.id}`;
       const isActive = pathname === href;
       const hasChildren = Boolean(page.children?.length);
       const pageKey = `page-${page.id}`;
@@ -279,9 +279,11 @@ export default function Sidebar() {
   if (loading) {
     return (
       <Box
-        p={3}
-        display="flex"
-        justifyContent="center"
+        sx={{
+          p: 3,
+          display: "flex",
+          justifyContent: "center"
+        }}
       >
         <CircularProgress size={24} />
       </Box>

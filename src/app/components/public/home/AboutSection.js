@@ -43,7 +43,7 @@ export default function AboutSection() {
             }}
         >
             <Container maxWidth="xl">
-                <Grid container spacing={{ xs: 5, md: 8 }} alignItems="center">
+                <Grid container spacing={{ xs: 5, md: 8 }} sx={{ alignItems: "center" }}>
                     {/* Image */}
                     <Grid size={{ xs: 12, md: 6 }}>
                         <Box
@@ -161,7 +161,7 @@ export default function AboutSection() {
                                             key={item.title}
                                             direction="row"
                                             spacing={2}
-                                            alignItems="flex-start"
+                                            sx={{ alignItems: "flex-start" }}
                                         >
                                             <Box
                                                 sx={{

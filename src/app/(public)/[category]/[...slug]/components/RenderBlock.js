@@ -171,7 +171,10 @@ export default function RenderBlock({ block }) {
                                         hover
                                     >
                                         <TableCell>
-                                            <Stack direction="row" alignItems="center" spacing={1.5}>
+                                            <Stack
+                                                direction="row" spacing={1.5}
+                                                sx={{ alignItems: "center" }}
+                                            >
                                                 <Box sx={{ color: "secondary.main", display: "flex" }}>
                                                     <PictureAsPdfOutlined />
                                                 </Box>
@@ -231,7 +234,7 @@ export default function RenderBlock({ block }) {
                 <List sx={{ mb: 5 }} data-aos="fade-up">
 
                     {(block.items || []).map((item, i) => (
-                        <ListItem key={i} alignItems="center">
+                        <ListItem key={i} sx={{ alignItems: "center" }}>
                             <ListItemIcon sx={{ minWidth: 35, mr: 2, color: "secondary.main" }}>
                                 <FontAwesomeIcon
                                     icon={faCircleCheck}
@@ -379,7 +382,7 @@ export default function RenderBlock({ block }) {
             return (
                 <Box sx={{ mb: 8 }} data-aos="fade-up">
 
-                    <Grid container spacing={5} alignItems="center">
+                    <Grid container spacing={5} sx={{ alignItems: "center" }}>
 
                         <Grid size={{ xs: 12, md: 5 }}>
                             {renderImage(block.image, block.alt, {
@@ -444,12 +447,14 @@ export default function RenderBlock({ block }) {
                         mb: 8,
                     }}
                 >
-                    <Grid container spacing={3} alignItems="stretch">
+                    <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
 
                         <Grid size={{ xs: 12, md: 3 }}>
                             <Stack
-                                justifyContent="center"
-                                sx={{ height: "100%" }}
+                                sx={{
+                                    justifyContent: "center",
+                                    height: "100%"
+                                }}
                             >
                                 <Typography
                                     variant="h3"
@@ -502,8 +507,10 @@ export default function RenderBlock({ block }) {
                                         <Stack
                                             direction="row"
                                             spacing={2}
-                                            alignItems="center"
-                                            mb={2}
+                                            sx={{
+                                                alignItems: "center",
+                                                mb: 2
+                                            }}
                                         >
                                             <Avatar
                                                 sx={{
@@ -538,7 +545,7 @@ export default function RenderBlock({ block }) {
                         ))}
 
                     </Grid>
-                </Box>
+                </Box >
             );
 
         case "founder_profile":
@@ -546,7 +553,7 @@ export default function RenderBlock({ block }) {
             return (
                 <Box sx={{ mb: 8 }} data-aos="fade-up">
 
-                    <Grid container spacing={5} alignItems="center">
+                    <Grid container spacing={5} sx={{ alignItems: "center" }}>
 
                         <Grid size={{ xs: 12, md: 3 }}>
                             {renderImage(block.image, block.name, {
@@ -742,7 +749,7 @@ export default function RenderBlock({ block }) {
                         mb: 8,
                     }}
                 >
-                    <Grid container spacing={4} alignItems="center">
+                    <Grid container spacing={4} sx={{ alignItems: "center" }}>
 
                         <Grid size={{ xs: 12, md: block.image ? 7 : 12 }}>
 
@@ -764,7 +771,7 @@ export default function RenderBlock({ block }) {
                                     <ListItem
                                         key={index}
                                         disableGutters
-                                        alignItems="flex-start"
+                                        sx={{ alignItems: "flex-start" }}
                                     >
                                         <ListItemIcon
                                             sx={{ minWidth: 36, mt: 0.5 }}
@@ -901,7 +908,7 @@ export default function RenderBlock({ block }) {
                         </Typography>
                     )}
 
-                    <Grid container spacing={3} justifyContent='center'>
+                    <Grid container spacing={3} sx={{ justifyContent: 'center' }}>
 
                         {(block.items || []).map((item, index) => (
                             <Grid

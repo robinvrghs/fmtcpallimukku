@@ -10,13 +10,10 @@ import {
     Typography
 } from "@mui/material";
 
-import {
-    AddOutlined,
-    DeleteOutline,
-    PictureAsPdfOutlined
-} from "@mui/icons-material";
-
 import UploadEditor from "./UploadEditor";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faFilePdf, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 export default function FileItemsEditor({ block, updateBlock }) {
 
@@ -67,8 +64,10 @@ export default function FileItemsEditor({ block, updateBlock }) {
 
             <Stack
                 direction="row"
-                alignItems="center"
-                justifyContent="space-between"
+                sx={{
+                    alignItems: "center",
+                    justifyContent: "space-between"
+                }}
             >
                 <Typography fontWeight={600}>
                     Files ({files.length})
@@ -77,7 +76,7 @@ export default function FileItemsEditor({ block, updateBlock }) {
                 <Button
                     size="small"
                     variant="outlined"
-                    startIcon={<AddOutlined />}
+                    startIcon={<FontAwesomeIcon icon={faPlus} />}
                     onClick={addFile}
                 >
                     Add File
@@ -96,12 +95,17 @@ export default function FileItemsEditor({ block, updateBlock }) {
                 >
                     <Stack
                         direction="row"
-                        alignItems="center"
-                        justifyContent="space-between"
-                        mb={2}
+                        sx={{
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            mb: 2
+                        }}
                     >
-                        <Stack direction="row" spacing={1} alignItems="center">
-                            <PictureAsPdfOutlined color="secondary" />
+                        <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+                            <FontAwesomeIcon
+                                icon={faFilePdf}
+                                style={{ color: "secondary" }}
+                            />
                             <Typography fontWeight={600}>
                                 File {index + 1}
                             </Typography>
@@ -113,7 +117,7 @@ export default function FileItemsEditor({ block, updateBlock }) {
                             onClick={() => removeFile(file.id)}
                             aria-label={`Remove file ${index + 1}`}
                         >
-                            <DeleteOutline />
+                            <FontAwesomeIcon icon={faTrashCan} />
                         </IconButton>
                     </Stack>
 
