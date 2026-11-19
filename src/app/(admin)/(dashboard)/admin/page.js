@@ -43,7 +43,9 @@ const Dashboard = () => {
                 <Typography variant="h6">
                     Website Manager
                 </Typography>
-                <Divider sx={{ mb: 5 }} />                <Stack
+                <Divider sx={{ mb: 5 }} />
+
+                <Stack
                     direction="row"
                     spacing={3}
                     useFlexGap
