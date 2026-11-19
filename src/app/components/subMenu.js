@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -5,17 +7,18 @@ import {
     Box, Typography, Tab, Tabs
 } from "@mui/material";
 
-import { NAV_ITEMS } from "@/app/config/collegeConfig";
-
-const SubMenu = ({ title }) => {
-
-    const menu = NAV_ITEMS.find(item => item.label === title);
+export default function SubMenu({
+    title,
+    categorySlug,
+    pages = []
+}) {
 
     const pathname = usePathname();
 
-    const currentTab = menu?.children?.findIndex((tab) =>
-        pathname.startsWith(tab.link)
-    );
+    const currentTab = pages.findIndex((page) => {
+        const href = `/${categorySlug}/${page.slug}/`;
+        return pathname === href;
+    });
 
     return (
         <Box
@@ -32,15 +35,16 @@ const SubMenu = ({ title }) => {
             <Tabs
                 orientation="vertical"
                 variant="scrollable"
-                value={currentTab !== -1 ? currentTab : 0}
+                value={currentTab >= 0 ? currentTab : false}
                 sx={{ textAlign: 'left' }}
             >
-                {menu?.children?.map((tab) => (
+                {pages.map((page) => (
                     <Tab
-                        key={tab.link}
-                        label={tab.label}
+                        key={page.id}
+                        label={page.title}
                         component={Link}
-                        href={tab.link}
+                        href={`/${categorySlug}/${page.slug}`}
+                        prefetch={false}
                         sx={{ alignItems: 'start', textAlign: 'left' }}
                     />
                 ))}
@@ -49,5 +53,3 @@ const SubMenu = ({ title }) => {
         </Box>
     )
 }
-
-export default SubMenu;

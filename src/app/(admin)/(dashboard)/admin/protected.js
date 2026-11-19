@@ -1,6 +1,9 @@
-import { useEffect, useState } from 'react';
+'use client';
 
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+
+const API_URL = 'https://fmtcpallimukku.ac.in/api';
 
 const withProtectedRoute = (WrappedComponent) => {
     return function WithProtectedRoute(props) {
@@ -11,22 +14,63 @@ const withProtectedRoute = (WrappedComponent) => {
         const router = useRouter();
 
         useEffect(() => {
-            const storedUsername = sessionStorage.getItem('username');
 
-            if (!storedUsername) {
-                router.replace('/admin-login')
-            } else {
-                setAllowed(true);
-            }
-            setLoading(false);
-        }, []);
+            let mounted = true;
 
-        if (loading) return <p>Loading</p>;
-        if (!allowed) return null;
+            const checkAuthentication = async () => {
+                try {
+                    const response = await fetch(
+                        `${API_URL}/auth/check.php`,
+                        {
+                            method: 'GET',
+                            credentials: 'include',
+                            headers: {
+                                'Accept': 'application/json',
+                            },
+                            cache: 'no-store',
+                        }
+                    );
+
+                    const result = await response.json();
+
+                    if (
+                        response.ok &&
+                        result.success === true &&
+                        result.authenticated === true
+                    ) {
+                        if (mounted) {
+                            setAllowed(true);
+                        }
+                    } else {
+                        router.replace('/admin-login');
+                    }
+                } catch (error) {
+                    console.error('Authentication check failed:', error);
+                    router.replace('/admin-login');
+                } finally {
+                    if (mounted) {
+                        setLoading(false);
+                    }
+                }
+            };
+
+            checkAuthentication();
+
+            return () => {
+                mounted = false;
+            };
+        }, [router]);
+
+        if (loading) {
+            return <p>Checking authentication...</p>;
+        }
+
+        if (!allowed) {
+            return null;
+        }
 
         return <WrappedComponent {...props} />;
     };
 };
-
 
 export default withProtectedRoute;

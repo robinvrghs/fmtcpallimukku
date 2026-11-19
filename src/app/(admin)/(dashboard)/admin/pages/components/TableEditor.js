@@ -1,225 +1,194 @@
+
 "use client";
 
 import {
+    Box,
     Stack,
     TextField,
     Button,
     IconButton,
-    Divider
+    Divider,
+    Typography,
+    Tooltip
 } from "@mui/material";
 
-import DeleteIcon
-    from "@mui/icons-material/Delete";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function TableEditor({
-    block,
-    updateBlock
-}) {
+export default function TableEditor({ block, updateBlock }) {
 
-    const updateHeader = (
-        index,
-        value
-    ) => {
+    const headers = Array.isArray(block.headers)
+        ? block.headers
+        : [];
 
-        const headers = [
-            ...block.headers
-        ];
+    const rows = Array.isArray(block.rows)
+        ? block.rows
+        : [];
 
-        headers[index] = value;
+    const updateHeader = (index, value) => {
+        const updatedHeaders = [...headers];
+        updatedHeaders[index] = value;
 
-        updateBlock({
-            headers
-        });
+        updateBlock({ headers: updatedHeaders });
     };
 
     const addColumn = () => {
-
-        const headers = [
-            ...block.headers,
-            `Column ${block.headers.length + 1
-            }`
-        ];
-
-        const rows =
-            block.rows.map(row => [
-                ...row,
-                ""
-            ]);
-
         updateBlock({
-            headers,
-            rows
+            headers: [
+                ...headers,
+                `Column ${headers.length + 1}`
+            ],
+            rows: rows.map(row => [
+                ...(Array.isArray(row) ? row : []),
+                ""
+            ])
         });
     };
 
-    const removeColumn =
-        columnIndex => {
-
-            const headers =
-                block.headers.filter(
-                    (_, i) =>
-                        i !== columnIndex
-                );
-
-            const rows =
-                block.rows.map(row =>
-                    row.filter(
-                        (_, i) =>
-                            i !== columnIndex
-                    )
-                );
-
-            updateBlock({
-                headers,
-                rows
-            });
-        };
-
-    const addRow = () => {
+    const removeColumn = (columnIndex) => {
+        if (headers.length <= 1) return;
 
         updateBlock({
+            headers: headers.filter((_, i) => i !== columnIndex),
+            rows: rows.map(row =>
+                (Array.isArray(row) ? row : []).filter(
+                    (_, i) => i !== columnIndex
+                )
+            )
+        });
+    };
+
+    const addRow = () => {
+        updateBlock({
             rows: [
-                ...block.rows,
-                Array(
-                    block.headers.length
-                ).fill("")
+                ...rows,
+                Array(headers.length).fill("")
             ]
         });
     };
 
-    const removeRow =
-        rowIndex => {
-
-            updateBlock({
-                rows: block.rows.filter(
-                    (_, i) =>
-                        i !== rowIndex
-                )
-            });
-        };
-
-    const updateCell = (
-        rowIndex,
-        colIndex,
-        value
-    ) => {
-
-        const rows = [
-            ...block.rows
-        ];
-
-        rows[rowIndex][colIndex] =
-            value;
-
+    const removeRow = (rowIndex) => {
         updateBlock({
-            rows
+            rows: rows.filter((_, i) => i !== rowIndex)
         });
+    };
+
+    const updateCell = (rowIndex, colIndex, value) => {
+        const updatedRows = rows.map((row, index) => {
+            if (index !== rowIndex) return row;
+
+            const updatedRow = [...row];
+            updatedRow[colIndex] = value;
+
+            return updatedRow;
+        });
+
+        updateBlock({ rows: updatedRows });
     };
 
     return (
         <Stack spacing={2}>
 
-            <Stack
-                direction="row"
-                spacing={1}
-            >
+            <Typography variant="subtitle2">
+                Table Headers
+            </Typography>
 
-                {block.headers.map(
-                    (
-                        header,
-                        index
-                    ) => (
-
+            <Box sx={{ overflowX: "auto" }}>
+                <Stack direction="row" spacing={1} sx={{ minWidth: "max-content" }}>
+                    {headers.map((header, index) => (
                         <Stack
                             key={index}
                             direction="row"
-                            spacing={1}
+                            spacing={0.5}
+                            alignItems="center"
                         >
-
                             <TextField
-                                label="Header"
+                                size="small"
+                                label={`Column ${index + 1}`}
                                 value={header}
-                                onChange={e =>
-                                    updateHeader(
-                                        index,
-                                        e.target.value
-                                    )
+                                onChange={(e) =>
+                                    updateHeader(index, e.target.value)
                                 }
+                                sx={{ width: 180 }}
                             />
 
-                            <IconButton
-                                color="error"
-                                onClick={() =>
-                                    removeColumn(
-                                        index
-                                    )
-                                }
-                            >
-                                <DeleteIcon />
-                            </IconButton>
-
+                            <Tooltip title="Remove column">
+                                <span>
+                                    <IconButton
+                                        color="error"
+                                        disabled={headers.length <= 1}
+                                        onClick={() => removeColumn(index)}
+                                    >
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </span>
+                            </Tooltip>
                         </Stack>
-                    )
-                )}
-
-            </Stack>
+                    ))}
+                </Stack>
+            </Box>
 
             <Button
                 variant="outlined"
                 onClick={addColumn}
+                sx={{ alignSelf: "flex-start" }}
             >
                 Add Column
             </Button>
 
             <Divider />
 
-            {block.rows.map(
-                (row, rowIndex) => (
+            <Typography variant="subtitle2">
+                Table Rows
+            </Typography>
 
-                    <Stack
-                        key={rowIndex}
-                        direction="row"
-                        spacing={1}
-                    >
-
-                        {row.map(
-                            (
-                                cell,
-                                colIndex
-                            ) => (
-
+            <Box sx={{ overflowX: "auto" }}>
+                <Stack spacing={1}>
+                    {rows.map((row, rowIndex) => (
+                        <Stack
+                            key={rowIndex}
+                            direction="row"
+                            spacing={1}
+                            alignItems="center"
+                            sx={{ minWidth: "max-content" }}
+                        >
+                            {headers.map((_, colIndex) => (
                                 <TextField
                                     key={colIndex}
-                                    value={cell}
-                                    onChange={e =>
+                                    size="small"
+                                    label={
+                                        colIndex === 0
+                                            ? `Row ${rowIndex + 1}`
+                                            : undefined
+                                    }
+                                    value={row?.[colIndex] ?? ""}
+                                    onChange={(e) =>
                                         updateCell(
                                             rowIndex,
                                             colIndex,
                                             e.target.value
                                         )
                                     }
+                                    sx={{ width: 180 }}
                                 />
-                            )
-                        )}
+                            ))}
 
-                        <IconButton
-                            color="error"
-                            onClick={() =>
-                                removeRow(
-                                    rowIndex
-                                )
-                            }
-                        >
-                            <DeleteIcon />
-                        </IconButton>
-
-                    </Stack>
-                )
-            )}
+                            <Tooltip title="Remove row">
+                                <IconButton
+                                    color="error"
+                                    onClick={() => removeRow(rowIndex)}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Tooltip>
+                        </Stack>
+                    ))}
+                </Stack>
+            </Box>
 
             <Button
                 variant="outlined"
                 onClick={addRow}
+                sx={{ alignSelf: "flex-start" }}
             >
                 Add Row
             </Button>

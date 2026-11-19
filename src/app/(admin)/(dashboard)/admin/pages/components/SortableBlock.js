@@ -1,20 +1,16 @@
+
 "use client";
 
-import { useSortable }
-    from "@dnd-kit/sortable";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
-import { CSS }
-    from "@dnd-kit/utilities";
-
-import BlockEditor
-    from "./BlockEditor";
+import BlockEditor from "./BlockEditor";
 
 export default function SortableBlock({
     block,
     blocks,
     setBlocks
 }) {
-
     const {
         attributes,
         listeners,
@@ -26,10 +22,7 @@ export default function SortableBlock({
     });
 
     const style = {
-        transform:
-            CSS.Transform.toString(
-                transform
-            ),
+        transform: CSS.Transform.toString(transform),
         transition
     };
 
@@ -40,7 +33,6 @@ export default function SortableBlock({
         >
             <BlockEditor
                 block={block}
-                blocks={blocks}
                 setBlocks={setBlocks}
                 dragHandleProps={{
                     ...attributes,

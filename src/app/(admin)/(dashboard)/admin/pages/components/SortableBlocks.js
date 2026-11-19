@@ -1,69 +1,69 @@
+
 "use client";
 
 import {
     DndContext,
-    closestCenter
+    closestCenter,
+    PointerSensor,
+    KeyboardSensor,
+    useSensor,
+    useSensors
 } from "@dnd-kit/core";
 
 import {
     SortableContext,
     verticalListSortingStrategy,
-    arrayMove
+    arrayMove,
+    sortableKeyboardCoordinates
 } from "@dnd-kit/sortable";
 
 import SortableBlock from "./SortableBlock";
 
-export default function SortableBlocks({
-    blocks,
-    setBlocks
-}) {
+export default function SortableBlocks({ blocks = [], setBlocks }) {
 
-    const handleDragEnd = (event) => {
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8
+            }
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates
+        })
+    );
 
-        const { active, over } = event;
+    const handleDragEnd = ({ active, over }) => {
+        if (!over || active.id === over.id) return;
 
-        if (!over) return;
+        const oldIndex = blocks.findIndex(
+            block => block.id === active.id
+        );
 
-        if (active.id === over.id)
-            return;
+        const newIndex = blocks.findIndex(
+            block => block.id === over.id
+        );
 
-        const oldIndex =
-            blocks.findIndex(
-                block =>
-                    block.id === active.id
-            );
+        if (oldIndex === -1 || newIndex === -1) return;
 
-        const newIndex =
-            blocks.findIndex(
-                block =>
-                    block.id === over.id
-            );
-
-        setBlocks(
-            arrayMove(
-                blocks,
-                oldIndex,
-                newIndex
-            )
+        setBlocks(previous =>
+            arrayMove(previous, oldIndex, newIndex)
         );
     };
 
     return (
         <DndContext
-            collisionDetection={
-                closestCenter
-            }
+            sensors={sensors}
+            collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
         >
             <SortableContext
-                items={(blocks ?? []).map(block => block.id)}
+                items={blocks.map(block => block.id)}
                 strategy={verticalListSortingStrategy}
             >
-                {(blocks ?? []).map(block => (
+                {blocks.map(block => (
                     <SortableBlock
                         key={block.id}
                         block={block}
-                        blocks={blocks}
                         setBlocks={setBlocks}
                     />
                 ))}

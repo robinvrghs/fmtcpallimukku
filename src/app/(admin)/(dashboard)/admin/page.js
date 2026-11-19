@@ -5,22 +5,29 @@ import {
     Divider, Grid, Paper, Stack, Typography
 } from "@mui/material";
 
-import withProtectedRoute from "./protected";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
-
-import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
+const dashboardItems = [
+    {
+        title: 'Notifications Manager',
+        image: '/images/icons/notifications.png',
+        path: '/admin/notifications-manager',
+    },
+    {
+        title: 'Gallery Manager',
+        image: '/images/icons/gallery.png',
+        path: '/admin/gallery-manager',
+    },
+    {
+        title: 'Popup Manager',
+        image: '/images/icons/popup.png',
+        path: '/admin/popup-manager',
+    },
+];
 
 const Dashboard = () => {
 
     const router = useRouter();
-
-    const [role, setRole] = useState('');
-
-    useEffect(() => {
-        setRole(sessionStorage.getItem('role'));
-    }, []);
 
     return (
         <Box sx={{ minHeight: '100vh', p: 5 }}>
@@ -36,121 +43,65 @@ const Dashboard = () => {
                 <Typography variant="h6">
                     Website Manager
                 </Typography>
-                <Divider sx={{ mb: 5 }} />
-
-                <Grid container spacing={5} sx={{ mb: 5 }}>
-                    <Grid size={12}>
-                        <Stack direction='row' spacing={5}>
-                            {/* {(role === 'admin') &&
-                                <ButtonBase onClick={() => router.push('/admin/application-manager-btech')}>
-                                    <Paper sx={{ p: 1, width: 125 }}>
-                                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                            <Avatar
-                                                variant="square"
-                                                alt="dashboard"
-                                                src="/images/icons/applications.png"
-                                                sx={{ width: 56, height: 56 }}
-                                            />
-                                        </Box>
-                                        <Typography variant="subtitle2">
-                                            B.Tech Applications
-                                        </Typography>
-                                    </Paper>
-                                </ButtonBase>
-                            } */}
-                            {/* {(role === 'admin') &&
-                                <ButtonBase onClick={() => router.push('/admin/application-manager-mtech')}>
-                                    <Paper sx={{ p: 1, width: 125 }}>
-                                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                            <Avatar
-                                                variant="square"
-                                                alt="dashboard"
-                                                src="/images/icons/applications.png"
-                                                sx={{ width: 56, height: 56 }}
-                                            />
-                                        </Box>
-                                        <Typography variant="subtitle2">
-                                            M.Tech Applications
-                                        </Typography>
-                                    </Paper>
-                                </ButtonBase>
-                            } */}
-                            {/* <ButtonBase onClick={() => router.push('/admin/staff-management')}>
-                                <Paper sx={{ p: 1, width: 125 }}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Avatar
-                                            variant="square"
-                                            alt="dashboard"
-                                            src="/images/icons/applications.png"
-                                            sx={{ width: 56, height: 56 }}
-                                        />
-                                    </Box>
-                                    <Typography variant="subtitle2">
-                                        Staff Management
-                                    </Typography>
-                                </Paper>
-                            </ButtonBase> */}
-                            <ButtonBase onClick={() => router.push('/admin/notifications-manager')}>
-                                <Paper sx={{ p: 1, width: 125 }}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Avatar
-                                            variant="square"
-                                            alt="dashboard"
-                                            src="/images/icons/notifications.png"
-                                            sx={{ width: 56, height: 56 }}
-                                        />
-                                    </Box>
-                                    <Typography variant="subtitle2">
-                                        Notifications Manager
-                                    </Typography>
-                                </Paper>
-                            </ButtonBase>
-                            <ButtonBase onClick={() => router.push('/admin/gallery-manager')}>
-                                <Paper sx={{ p: 1, width: 125 }}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Avatar
-                                            variant="square"
-                                            alt="dashboard"
-                                            src="/images/icons/gallery.png"
-                                            sx={{ width: 56, height: 56 }}
-                                        />
-                                    </Box>
-                                    <Typography variant="subtitle2">
-                                        Gallery  <br />Manager
-                                    </Typography>
-                                </Paper>
-                            </ButtonBase>
-                            <ButtonBase onClick={() => router.push('/admin/popup-manager')}>
-                                <Paper sx={{ p: 1, width: 125 }}>
-                                    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                        <Avatar
-                                            variant="square"
-                                            alt="dashboard"
-                                            src="/images/icons/popup.png"
-                                            sx={{ width: 56, height: 56 }}
-                                        />
-                                    </Box>
-                                    <Typography variant="subtitle2">
-                                        Popup  <br />Manager
-                                    </Typography>
-                                </Paper>
-                            </ButtonBase>
-                        </Stack>
-                    </Grid>
-                </Grid>
-
-                {/* {openLoading &&
-
-                <Backdrop
-                    sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
-                    open={openLoading}
+                <Divider sx={{ mb: 5 }} />                <Stack
+                    direction="row"
+                    spacing={3}
+                    useFlexGap
+                    flexWrap="wrap"
                 >
-                    <CircularProgress />
-                </Backdrop>
-            } */}
-            </Paper>
-        </Box>
-    )
-}
 
-export default withProtectedRoute(Dashboard);
+                    {dashboardItems.map((item) => (
+
+                        <ButtonBase
+                            key={item.path}
+                            onClick={() => router.push(item.path)}
+                            sx={{ borderRadius: 2 }}
+                        >
+                            <Paper
+                                elevation={1}
+                                sx={{
+                                    p: 2,
+                                    width: 140,
+                                    minHeight: 125,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: 1,
+                                    textAlign: 'center',
+                                    transition: '0.2s',
+                                    '&:hover': {
+                                        boxShadow: 4,
+                                        transform: 'translateY(-3px)',
+                                    },
+                                }}
+                            >
+
+                                <Avatar
+                                    variant="square"
+                                    src={item.image}
+                                    alt={item.title}
+                                    sx={{
+                                        width: 56,
+                                        height: 56,
+                                    }}
+                                />
+
+                                <Typography variant="subtitle2">
+                                    {item.title}
+                                </Typography>
+
+                            </Paper>
+                        </ButtonBase>
+
+                    ))}
+
+                </Stack>
+
+            </Paper>
+
+        </Box>
+    );
+};
+
+export default Dashboard;

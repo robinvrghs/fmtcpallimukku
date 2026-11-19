@@ -3,7 +3,7 @@ import {
     Box, Divider, Grid, Paper, Typography
 } from "@mui/material";
 
-import AdminSidebar from "./components/sidebar";
+import Sidebar from "./components/Sidebar";
 
 
 export default function PagesLayout({ children }) {
@@ -29,7 +29,7 @@ export default function PagesLayout({ children }) {
                     <Grid container spacing={5}>
                         <Grid size={{ xs: 12, md: 3 }}>
 
-                            <AdminSidebar />
+                            <Sidebar />
 
                         </Grid>
                         <Grid size={{ xs: 12, md: 9 }}>
