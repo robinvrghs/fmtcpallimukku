@@ -117,6 +117,7 @@ export default function AddNotification(props) {
                     }
                 );
 
+
                 const result = await response.json();
 
                 if (!response.ok || !result.status) {
