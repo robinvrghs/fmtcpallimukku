@@ -28,7 +28,7 @@ export default function MainDrawer() {
   }, []);
 
   return (
-    <Drawer variant="permanent" sx={{ width: 121 }}>
+    <Drawer variant="permanent" sx={{ width: 147 }}>
       <Toolbar />
       <List>
         <ListItem disablePadding sx={{ display: 'block' }}>
