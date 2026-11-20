@@ -3,6 +3,7 @@ import { Box, Container, Grid } from "@mui/material";
 import RenderBlock from "./components/RenderBlock";
 import SubMenu from "@/app/components/public/SubMenu";
 import { notFound } from "next/navigation";
+import PageHero from "@/app/components/public/PageHero";
 
 export const dynamic = "force-dynamic";
 
@@ -49,8 +50,13 @@ export default async function Page({ params }) {
     return (
         <Box>
 
-            {heroBlock && (
+            {heroBlock ? (
                 <RenderBlock block={heroBlock} />
+            ) : (
+                <PageHero
+                    title={data.page.title}
+                    breadcrumb={`Home / ${data.page.category_name} / ${data.page.title}`}
+                />
             )}
 
             <Container maxWidth="lg" sx={{ py: { xs: 5, md: 10 } }}>

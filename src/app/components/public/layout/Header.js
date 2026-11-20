@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -12,8 +12,6 @@ import {
     Typography,
     Button,
     IconButton,
-    Menu,
-    MenuItem,
     Drawer,
     List,
     ListItemButton,
@@ -23,22 +21,25 @@ import {
     Container,
     Collapse,
     Paper,
+    Portal,
 } from "@mui/material";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    LocationOnOutlined,
-    PhoneOutlined,
-    EmailOutlined,
-    LockOutlined,
-    Search,
-    Menu as MenuIcon,
-    KeyboardArrowDown,
-    ArrowForward,
-    Close,
-    ChevronRight,
-    ExpandMore,
-    ExpandLess,
-} from "@mui/icons-material";
+    faAngleDown,
+    faArrowRight,
+    faBars,
+    faChevronDown,
+    faChevronRight,
+    faChevronUp,
+    faClose,
+    faHouse,
+    faLocationDot,
+    faPhone,
+    faSearch
+} from "@fortawesome/free-solid-svg-icons";
+
+import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 
 const API_URL = "https://fmtcpallimukku.ac.in/api";
 
@@ -84,21 +85,21 @@ function TopBar() {
                 >
                     <Stack direction="row" spacing={3} sx={{ alignItems: "center" }}>
                         <Stack direction="row" spacing={0.7} sx={{ alignItems: "center" }}>
-                            <LocationOnOutlined fontSize="small" />
+                            <FontAwesomeIcon icon={faLocationDot} />
                             <Typography variant="caption">
                                 Pallimukku, Kollam, Kerala
                             </Typography>
                         </Stack>
 
                         <Stack direction="row" spacing={0.7} sx={{ alignItems: "center" }}>
-                            <PhoneOutlined fontSize="small" />
+                            <FontAwesomeIcon icon={faPhone} />
                             <Typography variant="caption">
                                 0474-2727368
                             </Typography>
                         </Stack>
 
                         <Stack direction="row" spacing={0.7} sx={{ alignItems: "center" }}>
-                            <EmailOutlined fontSize="small" />
+                            <FontAwesomeIcon icon={faEnvelope} />
                             <Typography variant="caption">
                                 fathimabed@gmail.com
                             </Typography>
@@ -128,11 +129,11 @@ function TopBar() {
 function MainHeader({ onMobileMenu }) {
     return (
         <Box sx={{ bgcolor: "#fff" }}>
-            <Container maxWidth="xl">
+            <Container maxWidth="xl" sx={{ py: 2 }}>
                 <Toolbar
                     disableGutters
                     sx={{
-                        minHeight: { xs: 82, md: 112 },
+                        minHeight: 94,
                         justifyContent: "space-between",
                         gap: 2,
                     }}
@@ -145,8 +146,8 @@ function MainHeader({ onMobileMenu }) {
                     >
                         <Box
                             sx={{
-                                width: { xs: 55, md: 300 },
-                                height: { xs: 55, md: 112 },
+                                width: 230,
+                                height: 62,
                                 position: "relative",
                                 flexShrink: 0,
                             }}
@@ -188,14 +189,14 @@ function MainHeader({ onMobileMenu }) {
                         sx={{ display: { xs: "none", md: "flex" }, alignItems: "center" }}
                     >
                         <IconButton aria-label="Search">
-                            <Search />
+                            <FontAwesomeIcon icon={faSearch} />
                         </IconButton>
 
                         <Button
                             component={Link}
                             href="/contact"
                             variant="contained"
-                            endIcon={<ArrowForward />}
+                            endIcon={<FontAwesomeIcon icon={faArrowRight} />}
                             sx={{
                                 bgcolor: COLORS.burgundy,
                                 borderRadius: 2,
@@ -220,13 +221,15 @@ function MainHeader({ onMobileMenu }) {
                         }}
                         aria-label="Open navigation"
                     >
-                        <MenuIcon />
+                        <FontAwesomeIcon icon={faBars} />
                     </IconButton>
                 </Toolbar>
             </Container>
         </Box>
     );
 }
+
+
 
 function DesktopPageItem({
     page,
@@ -240,90 +243,161 @@ function DesktopPageItem({
 
     const currentSlugs = [...parentSlugs, page.slug];
     const href = buildPageHref(categorySlug, currentSlugs);
-
     const active = isActivePath(pathname, href);
 
+    const [menuPosition, setMenuPosition] = useState(null);
+
+    const closeTimer = useRef(null);
+
+    const handleMouseEnter = (event) => {
+        if (!hasChildren) return;
+
+        clearTimeout(closeTimer.current);
+
+        const rect = event.currentTarget.getBoundingClientRect();
+
+        const submenuWidth = 270;
+        const gap = 8;
+
+        // Open left if there is insufficient space on the right
+        const openLeft =
+            rect.right + submenuWidth > window.innerWidth - gap;
+
+        const left = openLeft
+            ? rect.left - submenuWidth + 2
+            : rect.right - 2;
+
+        // Keep the submenu within the viewport
+        const top = Math.max(
+            gap,
+            Math.min(rect.top, window.innerHeight - 320)
+        );
+
+        setMenuPosition({
+            top,
+            left,
+        });
+    };
+
+    const handleMouseLeave = () => {
+        closeTimer.current = setTimeout(() => {
+            setMenuPosition(null);
+        }, 180);
+    };
+
+    const handleSubmenuEnter = () => {
+        clearTimeout(closeTimer.current);
+    };
+
     return (
-        <Box
-            sx={{
-                position: "relative",
-                "&:hover > .nested-menu": {
-                    display: "block",
-                },
-                "&:focus-within > .nested-menu": {
-                    display: "block",
-                },
-            }}
-        >
-            <MenuItem
+        <>
+            <ListItemButton
                 component={Link}
                 href={href}
                 onClick={onNavigate}
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
                 selected={active}
                 sx={{
-                    minWidth: 220,
-                    fontSize: 13,
+                    minWidth: 250,
+                    minHeight: 44,
+                    px: 2.5,
                     py: 1.2,
-                    color: active ? COLORS.burgundy : "text.primary",
+                    fontSize: 13,
+                    fontWeight: active ? 700 : 500,
+                    color: active ? COLORS.burgundy : COLORS.navy,
+
+                    borderLeft: active
+                        ? `3px solid ${COLORS.burgundy}`
+                        : "3px solid transparent",
+
                     "&:hover": {
+                        bgcolor: "rgba(136,13,46,0.06)",
                         color: COLORS.burgundy,
+                        borderLeftColor: COLORS.burgundy,
+                        pl: 3,
+                    },
+
+                    "&.Mui-selected": {
                         bgcolor: "rgba(136,13,46,0.06)",
                     },
                 }}
             >
-                {page.title}
+                <ListItemText
+                    primary={page.title}
+                    primaryTypographyProps={{
+                        fontSize: 13,
+                        fontWeight: active ? 700 : 500,
+                    }}
+                />
 
                 {hasChildren && (
-                    <ChevronRight
-                        sx={{ ml: "auto", fontSize: 18 }}
-                    />
+                    <FontAwesomeIcon icon={faChevronRight} />
                 )}
-            </MenuItem>
+            </ListItemButton>
 
-            {hasChildren && (
-                <Paper
-                    className="nested-menu"
-                    elevation={5}
-                    sx={{
-                        display: "none",
-                        position: "absolute",
-                        top: 0,
-                        left: "100%",
-                        minWidth: 230,
-                        borderRadius: 1.5,
-                        overflow: "visible",
-                        zIndex: 1400,
-                    }}
-                >
-                    {children.map((child) => (
-                        <DesktopPageItem
-                            key={child.id}
-                            page={child}
-                            categorySlug={categorySlug}
-                            parentSlugs={currentSlugs}
-                            pathname={pathname}
-                            onNavigate={onNavigate}
-                        />
-                    ))}
-                </Paper>
+            {hasChildren && menuPosition && (
+                <Portal>
+                    <Paper
+                        elevation={0}
+                        onMouseEnter={handleSubmenuEnter}
+                        onMouseLeave={handleMouseLeave}
+                        sx={{
+                            position: "fixed",
+
+                            top: menuPosition.top,
+                            left: menuPosition.left,
+
+                            width: 270,
+                            maxHeight: `calc(100vh - ${menuPosition.top}px - 8px)`,
+
+                            overflowY: "auto",
+                            overflowX: "hidden",
+
+                            borderRadius: 2,
+                            border: "1px solid #e9edf2",
+                            borderTop: `3px solid ${COLORS.gold}`,
+                            boxShadow: "0 14px 35px rgba(0,0,0,0.15)",
+
+                            bgcolor: "#fff",
+                            zIndex: 1600,
+
+                            py: 1,
+
+                            scrollbarWidth: "thin",
+
+                            "&::-webkit-scrollbar": {
+                                width: 6,
+                            },
+
+                            "&::-webkit-scrollbar-thumb": {
+                                bgcolor: "#b5bdc8",
+                                borderRadius: 10,
+                            },
+                        }}
+                    >
+                        {children.map((child) => (
+                            <DesktopPageItem
+                                key={child.id}
+                                page={child}
+                                categorySlug={categorySlug}
+                                parentSlugs={currentSlugs}
+                                pathname={pathname}
+                                onNavigate={onNavigate}
+                            />
+                        ))}
+                    </Paper>
+                </Portal>
             )}
-        </Box>
+        </>
     );
 }
 
+
+
 function Navigation({ categories, pathname }) {
-    const [anchorEl, setAnchorEl] = useState(null);
+
     const [activeMenu, setActiveMenu] = useState(null);
-
-    const handleOpen = (event, categoryId) => {
-        setAnchorEl(event.currentTarget);
-        setActiveMenu(categoryId);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-        setActiveMenu(null);
-    };
 
     const currentCategory = categories.find(
         (category) => category.id === activeMenu
@@ -334,23 +408,66 @@ function Navigation({ categories, pathname }) {
             sx={{
                 bgcolor: COLORS.navy,
                 display: { xs: "none", md: "block" },
+                position: "relative",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
             }}
+            onMouseLeave={() => setActiveMenu(null)}
         >
             <Container maxWidth="lg">
-                <Stack direction="row" sx={{ alignItems: "center" }}>
+                <Stack
+                    direction="row"
+                    sx={{ alignItems: "stretch" }}
+                >
+
+                    <Button
+                        component={Link}
+                        href="/"
+                        aria-label="Home"
+                        sx={{
+                            minWidth: 62,
+                            color: "#fff",
+                            borderRadius: 0,
+                            bgcolor:
+                                pathname === "/"
+                                    ? COLORS.burgundy
+                                    : "transparent",
+                            borderBottom:
+                                pathname === "/"
+                                    ? `3px solid ${COLORS.gold}`
+                                    : "3px solid transparent",
+
+                            "&:hover": {
+                                bgcolor: COLORS.burgundy,
+                            },
+                        }}
+                    >
+                        <FontAwesomeIcon
+                            icon={faHouse}
+                            style={{ fontSize: 17 }}
+                        />
+                    </Button>
 
                     {categories.map((category) => {
                         const active = pathname.startsWith(
-                            `/${category.slug}/`
+                            `/${category.slug}`
                         );
 
+                        const isOpen = activeMenu === category.id;
+
                         return (
-                            <Box key={category.id}>
+                            <Box
+                                key={category.id}
+                                sx={{
+                                    position: "relative",
+                                    display: "flex",
+                                    alignItems: "stretch",
+                                }}
+                                onMouseEnter={() =>
+                                    setActiveMenu(category.id)
+                                }
+                            >
                                 <Button
-                                    onClick={(event) =>
-                                        handleOpen(event, category.id)
-                                    }
-                                    endIcon={<KeyboardArrowDown />}
+                                    endIcon={<FontAwesomeIcon icon={faAngleDown} />}
                                     sx={{
                                         color: "#fff",
                                         borderRadius: 0,
@@ -359,40 +476,61 @@ function Navigation({ categories, pathname }) {
                                         fontSize: 13,
                                         fontWeight: 500,
                                         bgcolor:
-                                            active || activeMenu === category.id
+                                            active || isOpen
                                                 ? COLORS.burgundy
                                                 : "transparent",
                                         "&:hover": {
                                             bgcolor: COLORS.burgundy,
+                                        },
+                                        "& .MuiButton-endIcon": {
+                                            ml: 0.5,
+                                            transition: "transform 0.2s",
+                                            transform: isOpen
+                                                ? "rotate(180deg)"
+                                                : "rotate(0deg)",
                                         },
                                     }}
                                 >
                                     {category.name}
                                 </Button>
 
-                                <Menu
-                                    anchorEl={anchorEl}
-                                    open={activeMenu === category.id}
-                                    onClose={handleClose}
-                                    anchorOrigin={{
-                                        vertical: "bottom",
-                                        horizontal: "left",
-                                    }}
-                                    transformOrigin={{
-                                        vertical: "top",
-                                        horizontal: "left",
-                                    }}
-                                    slotProps={{
-                                        paper: {
-                                            sx: {
-                                                mt: 1,
-                                                minWidth: 230,
-                                                overflow: "visible",
-                                                borderRadius: 1.5,
-                                                boxShadow:
-                                                    "0 8px 30px rgba(0,0,0,0.15)",
-                                            },
+                                <Paper
+                                    elevation={0}
+                                    sx={{
+                                        position: "absolute",
+                                        top: "100%",
+                                        left: 0,
+                                        minWidth: 270,
+                                        py: 1,
+                                        borderRadius: "0 0 10px 10px",
+                                        border: "1px solid #e9edf2",
+                                        borderTop: `3px solid ${COLORS.gold}`,
+                                        boxShadow:
+                                            "0 14px 35px rgba(0,0,0,0.15)",
+                                        bgcolor: "#fff",
+                                        zIndex: 1400,
+                                        maxHeight: "calc(100vh - 180px)",
+                                        overflowY: "auto",
+                                        overflowX: "hidden",
+                                        scrollbarWidth: "thin",
+
+                                        "&::-webkit-scrollbar": {
+                                            width: 6,
                                         },
+
+                                        "&::-webkit-scrollbar-thumb": {
+                                            bgcolor: "#b5bdc8",
+                                            borderRadius: 10,
+                                        },
+
+                                        opacity: isOpen ? 1 : 0,
+                                        visibility: isOpen
+                                            ? "visible"
+                                            : "hidden",
+                                        transform: isOpen
+                                            ? "translateY(0)"
+                                            : "translateY(8px)",
+                                        transition: "all 0.2s ease",
                                     }}
                                 >
                                     {currentCategory?.pages?.map((page) => (
@@ -401,10 +539,12 @@ function Navigation({ categories, pathname }) {
                                             page={page}
                                             categorySlug={category.slug}
                                             pathname={pathname}
-                                            onNavigate={handleClose}
+                                            onNavigate={() =>
+                                                setActiveMenu(null)
+                                            }
                                         />
                                     ))}
-                                </Menu>
+                                </Paper>
                             </Box>
                         );
                     })}
@@ -488,7 +628,7 @@ function MobilePageItem({
                             expanded ? "Collapse submenu" : "Expand submenu"
                         }
                     >
-                        {expanded ? <ExpandLess /> : <ExpandMore />}
+                        {expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
                     </IconButton>
                 )}
             </Stack>
@@ -551,7 +691,7 @@ function MobileNavigation({
                         onClick={onClose}
                         aria-label="Close menu"
                     >
-                        <Close />
+                        <FontAwesomeIcon icon={faClose} />
                     </IconButton>
                 </Stack>
             </Box>
@@ -559,6 +699,18 @@ function MobileNavigation({
             <Divider />
 
             <List>
+
+                <ListItemButton
+                    component={Link}
+                    href="/"
+                    onClick={onClose}
+                    selected={pathname === "/"}
+                >
+                    <Box sx={{ width: 30, color: COLORS.burgundy }}>
+                        <FontAwesomeIcon icon={faHouse} />
+                    </Box>
+                    <ListItemText primary="Home" />
+                </ListItemButton>
 
                 {categories.map((category) => (
                     <MobileCategory
@@ -632,7 +784,7 @@ function MobileCategory({
                     }}
                 />
 
-                {expanded ? <ExpandLess /> : <ExpandMore />}
+                {expanded ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}
             </ListItemButton>
 
             <Collapse in={expanded} timeout="auto" unmountOnExit>

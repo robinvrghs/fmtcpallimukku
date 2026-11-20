@@ -32,6 +32,7 @@ import {
     PictureAsPdfOutlined,
     DownloadOutlined,
 } from "@mui/icons-material";
+import PageHero from "@/app/components/public/PageHero";
 
 export default function RenderBlock({ block }) {
 
@@ -306,75 +307,81 @@ export default function RenderBlock({ block }) {
         case "page_hero":
 
             return (
-                <Box
-                    data-aos="fade-up"
-                    sx={{
-                        position: "relative",
-                        minHeight: { xs: 260, md: 360 },
-                        display: "flex",
-                        alignItems: "center",
-                        overflow: "hidden",
-                        backgroundImage: block.image
-                            ? `linear-gradient(90deg, rgba(5,25,48,.94), rgba(5,25,48,.45)), url("${block.image}")`
-                            : "linear-gradient(120deg, #052039, #0B2D53)",
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                        px: { xs: 3, md: 8 },
-                        py: 8,
-                        mb: 5,
-                    }}
-                >
-                    <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
+                <PageHero
+                    title={block.title}
+                    description={block.description}
+                    image={block.image}
+                    breadcrumb={block.breadcrumb}
+                />
+                // <Box
+                //     data-aos="fade-up"
+                //     sx={{
+                //         position: "relative",
+                //         minHeight: { xs: 260, md: 360 },
+                //         display: "flex",
+                //         alignItems: "center",
+                //         overflow: "hidden",
+                //         backgroundImage: block.image
+                //             ? `linear-gradient(90deg, rgba(5,25,48,.94), rgba(5,25,48,.45)), url("${block.image}")`
+                //             : "linear-gradient(120deg, #052039, #0B2D53)",
+                //         backgroundSize: "cover",
+                //         backgroundPosition: "center",
+                //         px: { xs: 3, md: 8 },
+                //         py: 8,
+                //         mb: 5,
+                //     }}
+                // >
+                //     <Box sx={{ position: "relative", zIndex: 1, width: "100%" }}>
 
-                        {block.breadcrumb && (
-                            <Typography
-                                sx={{
-                                    color: "rgba(255,255,255,.75)",
-                                    mb: 2,
-                                    fontSize: 14,
-                                }}
-                            >
-                                {block.breadcrumb}
-                            </Typography>
-                        )}
+                //         {block.breadcrumb && (
+                //             <Typography
+                //                 sx={{
+                //                     color: "rgba(255,255,255,.75)",
+                //                     mb: 2,
+                //                     fontSize: 14,
+                //                 }}
+                //             >
+                //                 {block.breadcrumb}
+                //             </Typography>
+                //         )}
 
-                        <Typography
-                            variant="h1"
-                            sx={{
-                                color: "#fff",
-                                fontFamily: "Playfair Display",
-                                fontWeight: 700,
-                                fontSize: {
-                                    xs: "2.3rem",
-                                    md: "3.8rem",
-                                },
-                                mb: 2,
-                            }}
-                        >
-                            {block.title}
-                        </Typography>
+                //         <Typography
+                //             variant="h1"
+                //             sx={{
+                //                 color: "#fff",
+                //                 fontFamily: "Playfair Display",
+                //                 fontWeight: 700,
+                //                 fontSize: {
+                //                     xs: "2.3rem",
+                //                     md: "3.8rem",
+                //                 },
+                //                 mb: 2,
+                //             }}
+                //         >
+                //             {block.title}
+                //         </Typography>
 
-                        <Box
-                            sx={{
-                                width: 65,
-                                height: 4,
-                                bgcolor: "#E5BD55",
-                                mb: 2,
-                            }}
-                        />
+                //         <Box
+                //             sx={{
+                //                 width: 65,
+                //                 height: 4,
+                //                 bgcolor: "#E5BD55",
+                //                 mb: 2,
+                //             }}
+                //         />
 
-                        <Typography
-                            sx={{
-                                color: "rgba(255,255,255,.9)",
-                                maxWidth: 650,
-                                lineHeight: 1.8,
-                            }}
-                        >
-                            {block.description}
-                        </Typography>
+                //         <Typography
+                //             sx={{
+                //                 color: "rgba(255,255,255,.9)",
+                //                 maxWidth: 650,
+                //                 lineHeight: 1.8,
+                //             }}
+                //         >
+                //             {block.description}
+                //         </Typography>
 
-                    </Box>
-                </Box>
+                //     </Box>
+                // </Box>
             );
 
         case "image_text":
