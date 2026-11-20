@@ -14,7 +14,6 @@ import {
 import Link from "next/link";
 
 import Home from "@mui/icons-material/Home";
-import FeedOutlinedIcon from '@mui/icons-material/FeedOutlined';
 import CampaignOutlinedIcon from '@mui/icons-material/CampaignOutlined';
 import CollectionsOutlinedIcon from '@mui/icons-material/CollectionsOutlined';
 import ArticleIcon from '@mui/icons-material/Article';
@@ -175,7 +174,7 @@ export default function MainDrawer() {
           <ListItem disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               component={Link}
-              href="/admin/notifications-manager"
+              href="/admin/news-events"
               sx={{
                 display: 'block',
                 textAlign: 'center'
@@ -192,7 +191,7 @@ export default function MainDrawer() {
               >
                 <CampaignOutlinedIcon />
               </ListItemIcon>
-              <ListItemText primary='Notifications' />
+              <ListItemText primary='News & Events' />
             </ListItemButton>
           </ListItem>
           <Divider />
@@ -222,7 +221,7 @@ export default function MainDrawer() {
           </ListItem>
           <Divider />
 
-          <ListItem disablePadding sx={{ display: 'block' }}>
+          {/* <ListItem disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               component={Link}
               href="/admin/files-manager"
@@ -244,7 +243,7 @@ export default function MainDrawer() {
               </ListItemIcon>
               <ListItemText primary='Files' />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
 
         </Box>
 

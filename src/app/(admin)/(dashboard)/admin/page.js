@@ -10,17 +10,17 @@ import { useRouter } from "next/navigation";
 const dashboardItems = [
     {
         title: 'News & Events',
-        image: '/images/icons/notifications.png',
+        image: '/icons/books.png',
         path: '/admin/news-events',
     },
     {
         title: 'Pages',
-        image: '/images/icons/notifications.png',
+        image: '/icons/journals.png',
         path: '/admin/pages',
     },
     {
-        title: 'Gallery Manager',
-        image: '/images/icons/gallery.png',
+        title: 'Gallery',
+        image: '/icons/teaching.png',
         path: '/admin/gallery-manager',
     },
 
