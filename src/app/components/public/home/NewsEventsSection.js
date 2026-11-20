@@ -1,7 +1,11 @@
-"use client"
+
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import {
+    Alert,
     Box,
     Button,
     Container,
@@ -12,69 +16,80 @@ import {
 
 import {
     ArrowForward,
-    CalendarMonthOutlined,
     CampaignOutlined,
     EventOutlined,
 } from "@mui/icons-material";
 
-const announcements = [
-    {
-        date: "01",
-        month: "JUN",
-        year: "2026",
-        category: "ANNOUNCEMENT",
-        title: "Admission Notification",
-        description:
-            "Admission-related announcements and important information for prospective students.",
-        href: "/announcements",
-    },
-    {
-        date: "15",
-        month: "JUN",
-        year: "2026",
-        category: "ACADEMICS",
-        title: "Academic Activities",
-        description:
-            "Updates about academic activities, programmes and student learning experiences.",
-        href: "/announcements",
-    },
-    {
-        date: "20",
-        month: "JUN",
-        year: "2026",
-        category: "COLLEGE NEWS",
-        title: "College Activities and Updates",
-        description:
-            "Stay informed about important developments and activities from the college.",
-        href: "/announcements",
-    },
-];
+const API_URL = "https://fmtcpallimukku.ac.in/api";
 
-const upcomingEvents = [
-    {
-        day: "05",
-        month: "DEC",
-        title: "Academic Seminar",
-        description: "Academic seminar and knowledge-sharing session.",
-        category: "ACADEMIC",
-    },
-    {
-        day: "12",
-        month: "DEC",
-        title: "Student Development Programme",
-        description: "A programme focused on student learning and development.",
-        category: "STUDENT LIFE",
-    },
-    {
-        day: "18",
-        month: "DEC",
-        title: "College Activities",
-        description: "Updates on activities and programmes at the college.",
-        category: "CAMPUS",
-    },
-];
+const formatDate = (dateString) => {
+    if (!dateString) return null;
 
-export default function NewsEventsSection() {
+    // Parse YYYY-MM-DD without timezone conversion
+    const [year, month, day] = dateString.split("-").map(Number);
+
+    const date = new Date(year, month - 1, day);
+
+    return {
+        day: String(day).padStart(2, "0"),
+        month: date.toLocaleString("en", { month: "short" }).toUpperCase(),
+        year: String(year),
+    };
+};
+
+const NewsEventsSection = () => {
+    const [announcements, setAnnouncements] = useState([]);
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        const fetchNewsEvents = async () => {
+            try {
+                setLoading(true);
+                setError("");
+
+                const response = await fetch(
+                    `${API_URL}/news-events/get_news_events.php`,
+                    {
+                        method: "GET",
+                        cache: "no-store",
+                        headers: {
+                            Accept: "application/json",
+                        },
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.status) {
+                    throw new Error(
+                        result.error || "Unable to load news and events."
+                    );
+                }
+
+                setAnnouncements(
+                    Array.isArray(result.announcements)
+                        ? result.announcements
+                        : []
+                );
+
+                setUpcomingEvents(
+                    Array.isArray(result.events)
+                        ? result.events
+                        : []
+                );
+            } catch (err) {
+                console.error("News and events error:", err);
+                setError(err.message || "Unable to load news and events.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchNewsEvents();
+    }, []);
+
     return (
         <Box
             component="section"
@@ -91,7 +106,10 @@ export default function NewsEventsSection() {
                     sx={{
                         mb: 5,
                         justifyContent: "space-between",
-                        alignItems: { xs: "flex-start", md: "flex-end" }
+                        alignItems: {
+                            xs: "flex-start",
+                            md: "flex-end",
+                        },
                     }}
                 >
                     <Box>
@@ -111,19 +129,33 @@ export default function NewsEventsSection() {
                             component="h2"
                             sx={{
                                 color: "#0B2D53",
-                                fontFamily: "var(--font-playfair), Georgia, serif",
-                                fontSize: { xs: 32, sm: 38, md: 44 },
+                                fontFamily:
+                                    "var(--font-playfair), Georgia, serif",
+                                fontSize: {
+                                    xs: 32,
+                                    sm: 38,
+                                    md: 44,
+                                },
                                 fontWeight: 700,
                                 lineHeight: 1.2,
                             }}
                         >
                             News, events &amp;
-                            <Box component="span" sx={{ color: "#880D2E" }}>
+                            <Box
+                                component="span"
+                                sx={{ color: "#880D2E" }}
+                            >
                                 {" "}announcements.
                             </Box>
                         </Typography>
                     </Box>
                 </Stack>
+
+                {error && (
+                    <Alert severity="error" sx={{ mb: 3 }}>
+                        {error}
+                    </Alert>
+                )}
 
                 <Grid container spacing={4}>
                     {/* Announcements */}
@@ -131,9 +163,13 @@ export default function NewsEventsSection() {
                         <Stack
                             direction="row"
                             spacing={1}
-                            sx={{ mb: 2.5, alignItems: "center" }}
+                            sx={{
+                                mb: 2.5,
+                                alignItems: "center",
+                            }}
                         >
                             <CampaignOutlined sx={{ color: "#880D2E" }} />
+
                             <Typography
                                 sx={{
                                     color: "#0B2D53",
@@ -146,127 +182,188 @@ export default function NewsEventsSection() {
                         </Stack>
 
                         <Stack spacing={2}>
-                            {announcements.map((item) => (
-                                <Box
-                                    key={item.title}
-                                    component={Link}
-                                    href={item.href}
-                                    sx={{
-                                        display: "flex",
-                                        gap: 2.5,
-                                        p: { xs: 2, sm: 2.5 },
-                                        bgcolor: "#FFFFFF",
-                                        border: "1px solid #EEEAE3",
-                                        borderRadius: 2,
-                                        color: "inherit",
-                                        transition: "all 0.25s ease",
-                                        "&:hover": {
-                                            borderColor: "#D4AF37",
-                                            transform: "translateX(4px)",
-                                        },
-                                    }}
-                                >
-                                    <Box
+                            {loading ? (
+                                <Typography color="text.secondary">
+                                    Loading announcements...
+                                </Typography>
+                            ) : announcements.length > 0 ? (
+                                announcements.map((item) => {
+                                    const date = formatDate(
+                                        item.display_date
+                                    );
+
+                                    return (
+                                        <Box
+                                            key={item.id}
+                                            component={Link}
+                                            href={
+                                                item.link || "/announcements"
+                                            }
+                                            sx={{
+                                                display: "flex",
+                                                gap: 2.5,
+                                                p: {
+                                                    xs: 2,
+                                                    sm: 2.5,
+                                                },
+                                                bgcolor: "#FFFFFF",
+                                                border: "1px solid #EEEAE3",
+                                                borderRadius: 2,
+                                                color: "inherit",
+                                                textDecoration: "none",
+                                                transition: "all 0.25s ease",
+                                                "&:hover": {
+                                                    borderColor: "#D4AF37",
+                                                    transform: "translateX(4px)",
+                                                },
+                                            }}
+                                        >
+                                            <Box
+                                                sx={{
+                                                    width: 68,
+                                                    minWidth: 68,
+                                                    height: 76,
+                                                    bgcolor: "#0B2D53",
+                                                    color: "#FFFFFF",
+                                                    borderRadius: 1.5,
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    justifyContent: "center",
+                                                }}
+                                            >
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: 25,
+                                                        fontWeight: 700,
+                                                        lineHeight: 1,
+                                                    }}
+                                                >
+                                                    {date?.day}
+                                                </Typography>
+
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: 11,
+                                                        fontWeight: 700,
+                                                        mt: 0.5,
+                                                    }}
+                                                >
+                                                    {date?.month}
+                                                </Typography>
+
+                                                <Typography
+                                                    sx={{
+                                                        fontSize: 9,
+                                                        opacity: 0.7,
+                                                    }}
+                                                >
+                                                    {date?.year}
+                                                </Typography>
+                                            </Box>
+
+                                            <Box sx={{ flex: 1, minWidth: 0 }}>
+                                                <Typography
+                                                    sx={{
+                                                        color: "#880D2E",
+                                                        fontSize: 10,
+                                                        fontWeight: 700,
+                                                        letterSpacing: 1,
+                                                        mb: 0.7,
+                                                    }}
+                                                >
+                                                    {item.category}
+                                                </Typography>
+
+                                                <Typography
+                                                    sx={{
+                                                        color: "#0B2D53",
+                                                        fontWeight: 700,
+                                                        fontSize: 15,
+                                                        mb: 0.5,
+                                                    }}
+                                                >
+                                                    {item.title}
+                                                </Typography>
+
+                                                <Typography
+                                                    sx={{
+                                                        color: "#64748B",
+                                                        fontSize: 12,
+                                                        lineHeight: 1.7,
+                                                    }}
+                                                >
+                                                    {item.description}
+                                                </Typography>
+                                            </Box>
+
+                                            <ArrowForward
+                                                sx={{
+                                                    color: "#B18A28",
+                                                    alignSelf: "center",
+                                                    display: {
+                                                        xs: "none",
+                                                        sm: "block",
+                                                    },
+                                                }}
+                                            />
+                                        </Box>
+                                    );
+                                })
+                            ) : (
+                                !error && (
+                                    <Typography
                                         sx={{
-                                            width: 68,
-                                            minWidth: 68,
-                                            height: 76,
-                                            bgcolor: "#0B2D53",
-                                            color: "#FFFFFF",
-                                            borderRadius: 1.5,
-                                            display: "flex",
-                                            flexDirection: "column",
-                                            alignItems: "center",
-                                            justifyContent: "center",
+                                            color: "#64748B",
+                                            py: 3,
+                                            fontSize: 14,
                                         }}
                                     >
-                                        <Typography
-                                            sx={{ fontSize: 25, fontWeight: 700, lineHeight: 1 }}
-                                        >
-                                            {item.date}
-                                        </Typography>
-                                        <Typography
-                                            sx={{ fontSize: 11, fontWeight: 700, mt: 0.5 }}
-                                        >
-                                            {item.month}
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 9, opacity: 0.7 }}>
-                                            {item.year}
-                                        </Typography>
-                                    </Box>
-
-                                    <Box sx={{ flex: 1 }}>
-                                        <Typography
-                                            sx={{
-                                                color: "#880D2E",
-                                                fontSize: 10,
-                                                fontWeight: 700,
-                                                letterSpacing: 1,
-                                                mb: 0.7,
-                                            }}
-                                        >
-                                            {item.category}
-                                        </Typography>
-
-                                        <Typography
-                                            sx={{
-                                                color: "#0B2D53",
-                                                fontWeight: 700,
-                                                fontSize: 15,
-                                                mb: 0.5,
-                                            }}
-                                        >
-                                            {item.title}
-                                        </Typography>
-
-                                        <Typography
-                                            sx={{
-                                                color: "#64748B",
-                                                fontSize: 12,
-                                                lineHeight: 1.7,
-                                            }}
-                                        >
-                                            {item.description}
-                                        </Typography>
-                                    </Box>
-
-                                    <ArrowForward
-                                        sx={{
-                                            color: "#B18A28",
-                                            alignSelf: "center",
-                                            display: { xs: "none", sm: "block" },
-                                        }}
-                                    />
-                                </Box>
-                            ))}
+                                        No announcements available at the moment.
+                                    </Typography>
+                                )
+                            )}
                         </Stack>
 
                         <Button
                             component={Link}
                             href="/announcements"
                             endIcon={<ArrowForward />}
-                            sx={{ mt: 2, color: "#0B2D53", fontWeight: 700 }}
+                            sx={{
+                                mt: 2,
+                                color: "#0B2D53",
+                                fontWeight: 700,
+                            }}
                         >
                             All Announcements
                         </Button>
                     </Grid>
 
-                    {/* Events */}
+                    {/* Upcoming Events */}
                     <Grid size={{ xs: 12, md: 5 }}>
                         <Box
                             sx={{
                                 bgcolor: "#0B2D53",
                                 borderRadius: 2.5,
-                                p: { xs: 3, sm: 3.5 },
+                                p: {
+                                    xs: 3,
+                                    sm: 3.5,
+                                },
                                 height: "100%",
                             }}
                         >
                             <Stack
                                 direction="row"
                                 spacing={1}
-                                sx={{ mb: 3, alignItems: "center" }}
+                                sx={{
+                                    mb: 3,
+                                    alignItems: "center",
+                                }}
                             >
-                                <EventOutlined sx={{ color: "#E5BD55" }} />
+                                <EventOutlined
+                                    sx={{ color: "#E5BD55" }}
+                                />
+
                                 <Typography
                                     sx={{
                                         color: "#FFFFFF",
@@ -279,85 +376,121 @@ export default function NewsEventsSection() {
                             </Stack>
 
                             <Stack spacing={0}>
-                                {upcomingEvents.map((event, index) => (
-                                    <Box
-                                        key={event.title}
+                                {loading ? (
+                                    <Typography
                                         sx={{
-                                            display: "flex",
-                                            gap: 2,
-                                            py: 2.3,
-                                            borderBottom:
-                                                index !== upcomingEvents.length - 1
-                                                    ? "1px solid rgba(255,255,255,0.15)"
-                                                    : "none",
+                                            color: "rgba(255,255,255,0.65)",
+                                            py: 2,
                                         }}
                                     >
-                                        <Box
+                                        Loading events...
+                                    </Typography>
+                                ) : upcomingEvents.length > 0 ? (
+                                    upcomingEvents.map((event, index) => {
+                                        const date = formatDate(
+                                            event.display_date
+                                        );
+
+                                        return (
+                                            <Box
+                                                key={event.id}
+                                                component={Link}
+                                                href={event.link || "/events"}
+                                                sx={{
+                                                    display: "flex",
+                                                    gap: 2,
+                                                    py: 2.3,
+                                                    borderBottom:
+                                                        index !==
+                                                            upcomingEvents.length - 1
+                                                            ? "1px solid rgba(255,255,255,0.15)"
+                                                            : "none",
+                                                    color: "inherit",
+                                                    textDecoration: "none",
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        width: 53,
+                                                        minWidth: 53,
+                                                        textAlign: "center",
+                                                        borderRight:
+                                                            "1px solid rgba(255,255,255,0.2)",
+                                                        pr: 1.5,
+                                                    }}
+                                                >
+                                                    <Typography
+                                                        sx={{
+                                                            color: "#E5BD55",
+                                                            fontSize: 24,
+                                                            fontWeight: 700,
+                                                            lineHeight: 1.1,
+                                                        }}
+                                                    >
+                                                        {date?.day}
+                                                    </Typography>
+
+                                                    <Typography
+                                                        sx={{
+                                                            color: "#FFFFFF",
+                                                            fontSize: 10,
+                                                            fontWeight: 700,
+                                                        }}
+                                                    >
+                                                        {date?.month}
+                                                    </Typography>
+                                                </Box>
+
+                                                <Box sx={{ minWidth: 0 }}>
+                                                    <Typography
+                                                        sx={{
+                                                            color: "#E5BD55",
+                                                            fontSize: 9,
+                                                            fontWeight: 700,
+                                                            letterSpacing: 1,
+                                                            mb: 0.5,
+                                                        }}
+                                                    >
+                                                        {event.category}
+                                                    </Typography>
+
+                                                    <Typography
+                                                        sx={{
+                                                            color: "#FFFFFF",
+                                                            fontWeight: 600,
+                                                            fontSize: 14,
+                                                            mb: 0.5,
+                                                        }}
+                                                    >
+                                                        {event.title}
+                                                    </Typography>
+
+                                                    <Typography
+                                                        sx={{
+                                                            color: "rgba(255,255,255,0.65)",
+                                                            fontSize: 11,
+                                                            lineHeight: 1.7,
+                                                        }}
+                                                    >
+                                                        {event.description}
+                                                    </Typography>
+                                                </Box>
+                                            </Box>
+                                        );
+                                    })
+                                ) : (
+                                    !error && (
+                                        <Typography
                                             sx={{
-                                                width: 53,
-                                                minWidth: 53,
-                                                textAlign: "center",
-                                                borderRight: "1px solid rgba(255,255,255,0.2)",
-                                                pr: 1.5,
+                                                color: "rgba(255,255,255,0.65)",
+                                                py: 3,
+                                                fontSize: 13,
                                             }}
                                         >
-                                            <Typography
-                                                sx={{
-                                                    color: "#E5BD55",
-                                                    fontSize: 24,
-                                                    fontWeight: 700,
-                                                    lineHeight: 1.1,
-                                                }}
-                                            >
-                                                {event.day}
-                                            </Typography>
-                                            <Typography
-                                                sx={{
-                                                    color: "#FFFFFF",
-                                                    fontSize: 10,
-                                                    fontWeight: 700,
-                                                }}
-                                            >
-                                                {event.month}
-                                            </Typography>
-                                        </Box>
-
-                                        <Box>
-                                            <Typography
-                                                sx={{
-                                                    color: "#E5BD55",
-                                                    fontSize: 9,
-                                                    fontWeight: 700,
-                                                    letterSpacing: 1,
-                                                    mb: 0.5,
-                                                }}
-                                            >
-                                                {event.category}
-                                            </Typography>
-
-                                            <Typography
-                                                sx={{
-                                                    color: "#FFFFFF",
-                                                    fontWeight: 600,
-                                                    fontSize: 14,
-                                                    mb: 0.5,
-                                                }}
-                                            >
-                                                {event.title}
-                                            </Typography>
-
-                                            <Typography
-                                                sx={{
-                                                    color: "rgba(255,255,255,0.65)",
-                                                    fontSize: 11,
-                                                    lineHeight: 1.7,
-                                                }}
-                                            >
-                                                {event.description}
-                                            </Typography>
-                                        </Box>
-                                    </Box>
-                                ))}
+                                            No upcoming events scheduled.
+                                        </Typography>
+                                    )
+                                )}
                             </Stack>
 
                             <Button
@@ -377,6 +510,8 @@ export default function NewsEventsSection() {
                     </Grid>
                 </Grid>
             </Container>
-        </Box >
+        </Box>
     );
-}
+};
+
+export default NewsEventsSection;

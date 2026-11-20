@@ -9,20 +9,21 @@ import { useRouter } from "next/navigation";
 
 const dashboardItems = [
     {
-        title: 'Notifications Manager',
+        title: 'News & Events',
         image: '/images/icons/notifications.png',
-        path: '/admin/notifications-manager',
+        path: '/admin/news-events',
+    },
+    {
+        title: 'Pages',
+        image: '/images/icons/notifications.png',
+        path: '/admin/pages',
     },
     {
         title: 'Gallery Manager',
         image: '/images/icons/gallery.png',
         path: '/admin/gallery-manager',
     },
-    {
-        title: 'Popup Manager',
-        image: '/images/icons/popup.png',
-        path: '/admin/popup-manager',
-    },
+
 ];
 
 const Dashboard = () => {
