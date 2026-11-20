@@ -31,12 +31,12 @@ import {
 
 import AddOutlined from "@mui/icons-material/AddOutlined";
 import EditOutlined from "@mui/icons-material/EditOutlined";
-import DeleteOutline from "@mui/icons-material/DeleteOutline";
 import CampaignOutlined from "@mui/icons-material/CampaignOutlined";
 import EventOutlined from "@mui/icons-material/EventOutlined";
 
 import { useAuth } from "@/context/AuthContext";
 import NewsEventDialog from "./components/NewsEventDialog";
+import { DeleteOutlined } from "@mui/icons-material";
 
 const API_URL = "https://fmtcpallimukku.ac.in/api";
 
@@ -401,7 +401,7 @@ export default function NewsEventsPage() {
                                                 setDeleteRecord(record)
                                             }
                                         >
-                                            <DeleteOutline />
+                                            <DeleteOutlined />
                                         </IconButton>
                                     </TableCell>
                                 </TableRow>
